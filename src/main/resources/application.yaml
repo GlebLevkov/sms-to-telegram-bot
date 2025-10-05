@@ -1,0 +1,9 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: sms-bot
+
+bot:
+  subscribers: ${PHONE_NUMBER:+12345678}:glebchanskiy,+123:kek
+  token: ${TG_TOKEN}
