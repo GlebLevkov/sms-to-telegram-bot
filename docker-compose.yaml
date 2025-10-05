@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:15.3
+    restart: always
+    environment:
+      POSTGRES_DB: smsbot
+      POSTGRES_USER: smsbot
+      POSTGRES_PASSWORD: smsbot
+    ports:
+      - "5444:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
