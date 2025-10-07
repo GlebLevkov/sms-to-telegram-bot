@@ -9,12 +9,14 @@ import io.github.glebchanskiy.smsbot.domain.util.UserCreator;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Order(-1)
 @Component
 @RequiredArgsConstructor
 public class UpdateUserConsumer implements SmsConsumer {
@@ -31,6 +33,7 @@ public class UpdateUserConsumer implements SmsConsumer {
 
     @Override
     public void run(Message message) {
+        log.info("Updating subscriber user");
         String phoneNumber = message.fromPhoneNumber();
         String username = phoneToUsernameMap.getOrDefault(phoneNumber, phoneNumber);
 

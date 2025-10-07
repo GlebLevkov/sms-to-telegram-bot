@@ -1,12 +1,61 @@
 services:
-  db:
-    image: postgres:15.3
-    restart: always
-    environment:
-      POSTGRES_DB: smsbot
-      POSTGRES_USER: smsbot
-      POSTGRES_PASSWORD: smsbot
+  # broker-1: # kafka stay alone mode (one service - broker and controller)
+  #   image: confluentinc/cp-kafka:7.5.0
+  #   hostname: broker-1
+  #   container_name: broker-1
+  #   ports:
+  #     - 9092:9092
+  #   environment:
+  #     KAFKA_NODE_ID: 1
+  #     KAFKA_PROCESS_ROLES: broker,controller
+  #     KAFKA_LISTENERS: CONTROLLER://broker-1:9000,PLAINTEXT://0.0.0.0:9092
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker-1:9092
+  #     KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker-1:9000
+  #     KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+  #     KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+  #     CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #     KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+  #     KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+  broker-1:
+    image: confluentinc/cp-kafka:7.5.0
+    hostname: broker-1
+    container_name: broker-1
     ports:
-      - "5444:5432"
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - 9092:9092
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: CONTROLLER://broker-1:9000,PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker-1:9000,2@broker-2:9000
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+  broker-2:
+    image: confluentinc/cp-kafka:7.5.0
+    hostname: broker-2
+    container_name: broker-2
+    depends_on:
+      - broker-1
+    ports:
+      - 9093:9092
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: CONTROLLER://broker-2:9000,PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker-1:9000,2@broker-2:9000
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1

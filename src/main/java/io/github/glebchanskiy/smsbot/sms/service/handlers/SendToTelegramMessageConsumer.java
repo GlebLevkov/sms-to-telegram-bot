@@ -8,9 +8,11 @@ import io.github.glebchanskiy.smsbot.domain.model.Message;
 import io.github.glebchanskiy.smsbot.tg.service.TgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Slf4j
+@Order(2)
 @Component
 @RequiredArgsConstructor
 public class SendToTelegramMessageConsumer implements SmsConsumer {
@@ -19,6 +21,7 @@ public class SendToTelegramMessageConsumer implements SmsConsumer {
 
     @Override
     public void run(Message message) {
+        log.info("Send message to telegram");
         tgService.sendMessage(message.content(generateText(message)));
     }
 

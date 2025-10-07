@@ -3,13 +3,9 @@ spring:
     import: optional:file:.env[.properties]
   application:
     name: sms-bot
-  datasource:
-    url: jdbc:mysql://localhost:5444/smsbot
-    username: smsbot
-    password: smsbot
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml
-    enabled: true
 bot:
   subscribers: ${PHONE_NUMBER:+12345678}:glebchanskiy,+123:kek
   token: ${TG_TOKEN}
+
+kafka:
+  bootstrap-servers: 0.0.0.0:9092,0.0.0.0:9093
